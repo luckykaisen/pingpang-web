@@ -13,6 +13,31 @@ const routes = [
     path: '/home',
     component: () => import('@/views/home/index')
   },
+  {
+    name: '添加比赛',
+    path: '/competition/add',
+    component: () => import('@/views/competition/add/index'),
+  },
+  {
+    name: '比赛列表',
+    path: '/competition/list',
+    component: () => import('@/views/competition/index'),
+  },
+  {
+    name: '比赛详情',
+    path: '/competition/detail/:id',
+    component: () => import('@/views/competition/detail/index')
+  },
+  {
+    name: '比赛编辑',
+    path: '/competition/edit/:id',
+    component: () => import('@/views/competition/detail/index')
+  },
+  {
+    name: '比赛分组',
+    path: '/competition/group/detail/:id',
+    component: () => import('@/views/competition/group/index')
+  }
 ]
 
 const router = new VueRouter({

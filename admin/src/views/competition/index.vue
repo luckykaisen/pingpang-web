@@ -2,9 +2,10 @@
   <div>
     <el-table
         :data="list"
-        height="800"
+        height="620"
         border
-        style="width: 100%">
+        style="width: 100%;"
+        router>
       <el-table-column
           prop="name"
           label="名称"
@@ -28,8 +29,9 @@
           label="操作"
           width="1000">
         <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row)" type="button" size="small">查看</el-button>
-          <el-button type="button" size="small">编辑</el-button>
+          <el-button @click="modify(scope.row)" type="button" size="small">编辑</el-button>
+          <el-button @click="getDetail(scope.row)" type="button" size="small">查看</el-button>
+          <el-button @click="toGroup(scope.row)" type="button" size="small">分组</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -66,8 +68,7 @@ export default {
     }
   },
   created() {
-    this.fetchData()
-  },
+    this.fetchData()  },
   methods: {
     fetchData() {
       this.listLoading = true
@@ -82,6 +83,17 @@ export default {
             this.listLoading = false
           })
     },
+    getDetail(row) {
+      this.$router.push('/competition/detail/' + row.id)
+    },
+
+    modify(row) {
+      this.$router.push('/competition/edit/' + row.id)
+    },
+
+    toGroup(row) {
+      this.$router.push('/competition/group/detail/' + row.id)
+    }
   }
 }
 </script>

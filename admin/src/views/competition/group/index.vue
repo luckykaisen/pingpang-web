@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div v-if="!preview">
+    <div v-show="!preview">
       <el-row v-for="rowGroup in rowGroups">
         <el-col :span="3" style="margin-top: 10px" v-for="colGroup in rowGroup.colGroups">
           <div class="table-content">
@@ -30,7 +30,7 @@
       </el-row>
     </div>
 
-    <div v-else>
+    <div v-show="preview">
       <el-row v-for="rowGroup in rowGroups">
         <el-col :span="3" style="margin-top: 10px" v-for="colGroup in rowGroup.colGroups">
           <div class="table-content">

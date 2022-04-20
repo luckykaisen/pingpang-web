@@ -20,7 +20,6 @@
         <el-submenu index="2-1">
           <template slot="title">会员管理</template>
           <el-menu-item index="2-1-1">会员列表</el-menu-item>
-          <el-menu-item index="2-1-2">添加会员</el-menu-item>
         </el-submenu>
       </el-submenu>
 
@@ -43,6 +42,8 @@ export default {
         this.$router.push('/competition/list')
       } else if ('1-1-2' === key) {
         this.$router.push('/competition/add')
+      } else if ('2-1-1' === key) {
+        this.$router.push('/player/list')
       } else if ('3' === key) {
         this.$router.push('/home')
       }

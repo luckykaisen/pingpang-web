@@ -37,6 +37,11 @@ const routes = [
     name: '比赛分组',
     path: '/competition/group/detail/:id',
     component: () => import('@/views/competition/group/index')
+  },
+  {
+    name: '会员列表',
+    path: '/player/list',
+    component: () => import('@/views/player/index')
   }
 ]
 

@@ -49,6 +49,22 @@ export function joinCompetitionPlayer(data) {
   })
 }
 
+export function getConsoleCompetitionDetail(params) {
+  return request({
+    url: '/services/rs/console/competition/detail',
+    method: 'get',
+    params: params
+  })
+}
+
+export function JoinConsoleCompetitionPlayer(data) {
+  return request({
+    url: '/services/rs/console/competition/join',
+    method: 'post',
+    data: data
+  })
+}
+
 export function deleteGroupPlayer(params) {
   return request({
     url: '/services/rs/admin/competition/group/player/delete',
@@ -86,5 +102,13 @@ export function deleteGroup(params) {
     url: '/services/rs/admin/competition/group/delete',
     method: 'get',
     params: params
+  })
+}
+
+export function modifyGroup(data) {
+  return request({
+    url: '/services/rs/admin/competition/group/modify',
+    method: 'post',
+    data: data
   })
 }

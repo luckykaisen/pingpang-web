@@ -43,6 +43,7 @@
         @pagination="fetchData"
     />
   </div>
+
 </template>
 
 <script>
@@ -68,7 +69,11 @@ export default {
     }
   },
   created() {
-    this.fetchData()  },
+    this.fetchData()
+  },
+  mounted() {
+
+  },
   methods: {
     fetchData() {
       this.listLoading = true

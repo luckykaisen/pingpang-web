@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="nav-menu">
     <el-menu
         :default-active="activeIndex"
         class="el-menu-demo"
@@ -7,7 +7,8 @@
         @select="handleSelect"
         background-color="#545c64"
         text-color="#fff"
-        active-text-color="#ffd04b">
+        active-text-color="#ffd04b"
+        v-show="$store.getters.showNavMenu">
 
       <el-submenu index="1">
         <template slot="title">工作台</template>
@@ -34,6 +35,7 @@ export default {
   data() {
     return {
       activeIndex: '1',
+      show: true
     };
   },
   methods: {

@@ -4,7 +4,8 @@
       <el-row v-for="rowGroup in rowGroups">
         <el-col :span="3" style="margin-top: 10px" v-for="colGroup in rowGroup.colGroups">
           <div class="table-content">
-            <span>{{colGroup.name}}</span>
+<!--            <span>{{colGroup.name}}</span>-->
+            <el-input v-model="colGroup.name" placeholder="请输入姓名" style="width: 200px" @change="onModifyGroupName(colGroup)"></el-input>
             <el-table
                 border
                 :data="colGroup.players">
@@ -97,11 +98,11 @@ import {
   addGroupPlayer,
   deleteGroup,
   addGroup,
-  addOneGroup
+  addOneGroup,
+  modifyGroup
 } from '@/network/api/competition.js'
 
 import {getNotGroupPlayers} from '@/network/api/resource.js'
-
 
 export default {
   name: "index",
@@ -259,6 +260,16 @@ export default {
     onAddOneGroup() {
       addOneGroup({id : this.competitionId}).then((result) => {
         this.fetchData();
+      })
+    },
+
+    onModifyGroupName(group) {
+      modifyGroup({id : group.id, name : group.name}).then((result) => {
+        this.$message({
+          showClose: true,
+          message: result.resultMessage,
+          type: 'success'
+        });
       })
     }
   }

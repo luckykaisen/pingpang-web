@@ -1,5 +1,5 @@
 <template>
-  <div ref="nav-menu">
+  <div v-show="show">
     <el-menu
         :default-active="activeIndex"
         class="el-menu-demo"
@@ -7,8 +7,7 @@
         @select="handleSelect"
         background-color="#545c64"
         text-color="#fff"
-        active-text-color="#ffd04b"
-        v-show="$store.getters.showNavMenu">
+        active-text-color="#ffd04b">
 
       <el-submenu index="1">
         <template slot="title">工作台</template>
@@ -25,11 +24,17 @@
       </el-submenu>
 
       <el-menu-item index="3">森杨晟茂乒乓球俱乐部</el-menu-item>
+
+      <el-submenu index="4" v-show="name">
+        <template slot="title">{{name}}</template>
+        <el-menu-item index="4-1-1" @click.native="logout">退出</el-menu-item>
+      </el-submenu>
     </el-menu>
   </div>
 </template>
 
 <script>
+
 export default {
   name: "NavMenu",
   data() {
@@ -37,6 +42,11 @@ export default {
       activeIndex: '1',
       show: true
     };
+  },
+  computed: {
+    name() {
+      return this.$store.getters.name
+    }
   },
   methods: {
     handleSelect(key, keyPath) {
@@ -49,6 +59,10 @@ export default {
       } else if ('3' === key) {
         this.$router.push('/home')
       }
+    },
+    async logout() {
+      await this.$store.dispatch('account/logout')
+      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
   }
 }

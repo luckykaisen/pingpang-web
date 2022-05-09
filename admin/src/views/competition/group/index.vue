@@ -41,7 +41,7 @@
                 :show-header="false"
                 border
                 :data="colGroup.players"
-                style="font-size: 25px; width: 200px; font-weight: bold; margin-top: 10px">
+                style="font-size: 23px; width: 200px; font-weight: bold; margin-top: 10px">
               <el-table-column
                   label="姓名" align="center">
                 <template slot-scope="scope">

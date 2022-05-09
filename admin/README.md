@@ -1,29 +1,9 @@
-# admin
 
-## Project setup
-```
-npm install
-```
+打包：
+    docker rmi -f weikaisen/pingpang-nginx:1.0
+    docker build -t weikaisen/pingpang-nginx:1.0 .
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+推送：
+    docker push weikaisen/pingpang-nginx:1.0
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+部署：docker run -d -p 80:80 --name nginx --net pingpang-network weikaisen/nginx:1.0

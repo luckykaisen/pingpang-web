@@ -55,7 +55,6 @@ export default {
     };
   },
   created() {
-    this.$store.dispatch('menu/hidNavMenu')
     this.competitionId = this.$route.params.id
     this.fetchData()
   },

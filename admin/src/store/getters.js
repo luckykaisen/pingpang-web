@@ -1,4 +1,5 @@
 const getters = {
-  showNavMenu: state => state.menu.showNavMenu,
+  token: state => state.account.token,
+  name: state => state.account.name
 }
 export default getters

@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  pingpang-web:
+    build: .
+    image: weikaisen/pingpang-web
+    container_name: pingpang-web
+    networks:
+      - pingpang-network
+    ports:
+      - 80:80
+networks:
+  pingpang-network:
+    external: true
+    name: pingpang-network

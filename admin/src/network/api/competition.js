@@ -112,3 +112,11 @@ export function modifyGroup(data) {
     data: data
   })
 }
+
+export function downloadGroupAgainstExcel(data) {
+  return request({
+    url: '/services/rs/admin/competition/group/against/excel/download',
+    method: 'post',
+    data: data
+  })
+}

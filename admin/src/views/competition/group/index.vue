@@ -58,6 +58,7 @@
       <el-button type="primary" @click="addGroupDialogFormVisible = true" v-show="rowGroups.length === 0">创建分组</el-button>
       <el-button type="primary" @click="preview = !preview" >{{!preview ? '预览' : '编辑'}}</el-button>
       <el-button type="primary" @click="onAddOneGroup()">添加小组</el-button>
+      <el-button type="primary" @click="downloadExcelFormVisible = true" v-show="rowGroups.length !== 0">下载对阵表</el-button>
     </div>
 
     <el-dialog title="添加参赛人员" :visible.sync="dialogFormVisible" @close="onResetPlayerParams">
@@ -87,6 +88,21 @@
         <el-button type="primary" @click="onSubmitAddGroup('addGroupForm')">确 定</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog title="下载分组对阵表" :visible.sync="downloadExcelFormVisible" @close="onResetGroupParams">
+      <el-form :model="downloadGroupAgainstData" :rules="downloadGroupAgainstRules" ref="downloadGroupAgainstExcelForm">
+        <el-form-item label="对阵类型" label-width="120px" prop="typeId">
+          <el-select v-model="downloadGroupAgainstData.typeId" placeholder="请选择对阵类型">
+            <el-option label="小组循环" value="1"></el-option>
+            <el-option label="小组顺序循环" value="2"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="downloadExcelFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="onSubmitDownloadGroupAgainstExcel('downloadGroupAgainstExcelForm')">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -99,7 +115,7 @@ import {
   deleteGroup,
   addGroup,
   addOneGroup,
-  modifyGroup
+  modifyGroup, downloadGroupAgainstExcel
 } from '@/network/api/competition.js'
 
 import {getNotGroupPlayers} from '@/network/api/resource.js'
@@ -112,6 +128,7 @@ export default {
       competitionId: null,
       dialogFormVisible: false,
       addGroupDialogFormVisible: false,
+      downloadExcelFormVisible: false,
       rules: {
         playerId: [
           { required: true, message: '请选择参赛人姓名', trigger: 'blur' }
@@ -120,6 +137,11 @@ export default {
       addGroupRules: {
         count: [
           { required: true, message: '请选择分组数量', trigger: 'blur' }
+        ]
+      },
+      downloadGroupAgainstRules: {
+        typeId: [
+          { required: true, message: '请选择对阵类型', trigger: 'blur' }
         ]
       },
       groups: [
@@ -139,6 +161,10 @@ export default {
       addGroupData: {
         id: null,
         count: null
+      },
+      downloadGroupAgainstData : {
+        id : null,
+        typeId : null
       }
     }
   },
@@ -257,6 +283,20 @@ export default {
       });
     },
 
+    onSubmitDownloadGroupAgainstExcel(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.downloadExcelFormVisible = !this.downloadExcelFormVisible
+          this.downloadGroupAgainstData.id = this.competitionId
+          downloadGroupAgainstExcel(this.downloadGroupAgainstData).then((result) => {
+            this.downLoad(result.url)
+          })
+        } else {
+          return false;
+        }
+      });
+    },
+
     onAddOneGroup() {
       addOneGroup({id : this.competitionId}).then((result) => {
         this.fetchData();
@@ -271,6 +311,10 @@ export default {
           type: 'success'
         });
       })
+    },
+
+    downLoad(fileUrl) {
+      window.location.href = fileUrl
     }
   }
 }

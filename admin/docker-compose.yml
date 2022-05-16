@@ -8,7 +8,14 @@ services:
       - pingpang-network
     ports:
       - 80:80
+    volumes:
+      - storage:/home/storage
+
 networks:
   pingpang-network:
     external: true
     name: pingpang-network
+
+volumes:
+  storage:
+    external: true

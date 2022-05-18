@@ -3,7 +3,7 @@ module.exports = {
   devServer: {
     port: '8080', // 设置端口号
     proxy: {
-      '/api': {
+      [process.env.VUE_APP_BASE_API]: {
         target: 'http://127.0.0.1:8081', //API服务器的地址
         changeOrigin: true, // 是否跨域，虚拟的站点需要更管origin
         pathRewrite: {
@@ -14,3 +14,4 @@ module.exports = {
     },
   }
 }
+

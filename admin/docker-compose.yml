@@ -1,21 +1,19 @@
 version: "3.9"
 services:
   pingpang-web:
-    build: .
-    image: weikaisen/pingpang-web
+    image: ccr.ccs.tencentyun.com/weikaisen/pingpang-web:1.0
     container_name: pingpang-web
     networks:
       - pingpang-network
     ports:
       - 80:80
     volumes:
-      - storage:/home/storage
+      - pingpang-storage-volume:/home/storage
 
 networks:
   pingpang-network:
-    external: true
     name: pingpang-network
 
 volumes:
-  storage:
-    external: true
+  pingpang-storage-volume:
+    name: pingpang-storage-volume

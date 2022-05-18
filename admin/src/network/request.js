@@ -4,8 +4,8 @@ import { MessageBox } from 'element-ui'
 import { logout } from '@/network/api/account'
 
 const instance = axios.create({
-  // baseURL: 'http://127.0.0.1:8081',
-  baseURL: 'http://43.138.40.155',
+  baseURL: process.env.VUE_APP_BASE_API,
+  // baseURL: 'http://43.138.40.155',
   withCredentials: true,
   crossDomain: true,
   timeout: 10000

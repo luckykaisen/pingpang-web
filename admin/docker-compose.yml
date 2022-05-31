@@ -7,8 +7,10 @@ services:
       - pingpang-network
     ports:
       - 80:80
+      - 443:443
     volumes:
       - pingpang-storage-volume:/home/storage
+      - /opt/pingpang/certificate/www.sysm.ltd:/opt/pingpang/certificate/www.sysm.ltd
 
 networks:
   pingpang-network:

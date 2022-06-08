@@ -4,7 +4,7 @@
       <span>{{detail.name}}</span>
     </div>
     <div class="content-body">
-      <el-form :model="joinCompetitionData" ref="joinCompetitionForm" class="demo-ruleForm">
+      <el-form :model="joinCompetitionData" ref="joinCompetitionForm">
         <el-form-item
             label="姓名"
             prop="name"
@@ -15,20 +15,27 @@
         >
           <el-input type="text" v-model.trim="joinCompetitionData.name" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item label="聚餐" v-show="detail.isDinner">
+          <el-checkbox v-model="joinCompetitionData.dinner"/>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitForm('joinCompetitionForm')">提交</el-button>
         </el-form-item>
       </el-form>
     </div>
-    <div class="content-join-player">
-      <el-table
-          :data="detail.players"
-          style="width: 100%">
+    <div :class="{'content-join-player360': detail.isDinner, 'content-join-player180' : !detail.isDinner}">
+      <el-table :data="detail.players">
         <el-table-column
             prop="name"
-            label="已报名"
-            width="180">
+            label="已报名" width="180px">
         </el-table-column>
+
+          <el-table-column
+              prop="dinner"
+              label="聚餐"
+              :formatter="booleanFormatter"
+              v-if="detail.isDinner" width="180px">
+          </el-table-column>
       </el-table>
     </div>
   </div>
@@ -46,11 +53,13 @@ export default {
       detail: {
         id: null,
         name: null,
-        players: []
+        players: [],
+        isDinner: false
       },
       joinCompetitionData: {
         id: null,
-        name: null
+        name: null,
+        dinner: false
       }
     };
   },
@@ -67,6 +76,13 @@ export default {
           name,
           players
         } = result
+
+        for (let i = 0; i < result.signUpOptionIds.length; i++) {
+          if (result.signUpOptionIds[i] === 1) {
+            this.$set(this.detail, 'isDinner', true)
+            this.$set(this.joinCompetitionData, 'dinner', true)
+          }
+        }
 
         this.$set(this.detail, 'id', id)
         this.$set(this.detail, 'name', name)
@@ -92,6 +108,10 @@ export default {
           return false;
         }
       });
+    },
+
+    booleanFormatter(row, column) {
+      return row.dinner ? '是' : '否';
     }
   }
 }
@@ -105,7 +125,7 @@ export default {
   .content-header{
     font-size: 48px;
     font-weight: 600;
-    line-height: 240px;
+    line-height: 100px;
     color: #ffffff;
     background-color: #6495ED;
   }
@@ -116,14 +136,19 @@ export default {
     justify-content: center;
   }
 
-  .demo-ruleForm{
-    width: 300px;
+  .content-join-player180{
+    width: 180px;
+    margin:auto
+    /*text-align: center;*/
+    /*justify-content: center;*/
+    /*width: 360px;*/
   }
 
-  .content-join-player{
-    display: flex;
-    justify-content: center;
-    margin: 20px auto;
-    width: 180px;
+  .content-join-player360{
+    width: 360px;
+    margin:auto
+    /*text-align: center;*/
+    /*justify-content: center;*/
+    /*width: 360px;*/
   }
 </style>

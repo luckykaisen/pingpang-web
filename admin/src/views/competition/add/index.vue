@@ -21,6 +21,9 @@
               value-format="yyyy-MM-dd"></el-date-picker>
         </el-col>
       </el-form-item>
+      <el-form-item label="报名选项" prop="participantLimit">
+        <el-checkbox v-model="isDinner">聚餐</el-checkbox>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit('form')">提交</el-button>
       </el-form-item>
@@ -52,7 +55,9 @@ export default {
           { required: true, message: '请输入比赛日期', trigger: 'blur' }
         ],
       },
+      isDinner: false,
       addCompetitionData:{
+        signUpOptionIds: []
       }
     }
   },
@@ -61,6 +66,11 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.dialogFormVisible = !this.dialogFormVisible
+
+          if (this.isDinner) {
+            this.addCompetitionData.signUpOptionIds.push(1)
+          }
+
           addCompetition(this.addCompetitionData).then((result) => {
             this.$message({
               showClose: true,

@@ -22,6 +22,9 @@
                 value-format="yyyy-MM-dd"></el-date-picker>
           </el-col>
         </el-form-item>
+        <el-form-item label="报名选项:" prop="participantLimit">
+          <el-checkbox v-model="detail.isDinner">聚餐</el-checkbox>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">提交</el-button>
         </el-form-item>
@@ -43,6 +46,9 @@
           <el-col style="width: 200px">
             {{detail.date}}
           </el-col>
+        </el-form-item>
+        <el-form-item label="报名选项:" prop="participantLimit">
+          <el-checkbox v-model="detail.isDinner" disabled>聚餐</el-checkbox>
         </el-form-item>
       </el-form>
 
@@ -82,6 +88,9 @@
             <el-option :label="player.name" :value="player.id" v-for="player in notCompetitionPlayers"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="聚餐" v-show="detail.isDinner" :label-width="formLabelWidth" >
+          <el-checkbox v-model="addPlayerData.dinner"></el-checkbox>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -118,7 +127,8 @@ export default {
         players: []
       },
       addPlayerData: {
-        playerId: ''
+        playerId: '',
+        dinner: false
       },
       rules: {
         name: [
@@ -128,6 +138,14 @@ export default {
       },
       formLabelWidth: '120px',
       dialogFormVisible: false,
+      modifyData: {
+        id: null,
+        name: '',
+        description: '',
+        participantLimit: '',
+        date: '',
+        signUpOptionIds: []
+      }
     }
   },
   created() {
@@ -156,10 +174,27 @@ export default {
           date,
           players
         }
+
+        for (let i = 0; i < res.signUpOptionIds.length; i++) {
+          if (res.signUpOptionIds[i] === 1) {
+            this.detail.isDinner = true
+          }
+        }
       })
     },
     onSubmit() {
-      modifyCompetition(this.detail).then((res) => {
+
+      if (this.isDinner) {
+        this.modifyData.signUpOptionIds.push(1)
+      }
+
+      this.modifyData.id = this.detail.id
+      this.modifyData.name = this.detail.name
+      this.modifyData.description = this.detail.description
+      this.modifyData.participantLimit = this.detail.participantLimit
+      this.modifyData.date = this.detail.date
+
+      modifyCompetition(this.modifyData).then((res) => {
         this.$alert(res.resultMessage, '提示', {
           type: 'success'
         }).then(() => {

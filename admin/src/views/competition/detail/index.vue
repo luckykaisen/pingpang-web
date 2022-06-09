@@ -22,8 +22,8 @@
                 value-format="yyyy-MM-dd"></el-date-picker>
           </el-col>
         </el-form-item>
-        <el-form-item label="报名选项:" prop="participantLimit">
-          <el-checkbox v-model="detail.isDinner">聚餐</el-checkbox>
+        <el-form-item label="报名选项:">
+          <el-checkbox v-model="isDinner">聚餐</el-checkbox>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">提交</el-button>
@@ -48,7 +48,7 @@
           </el-col>
         </el-form-item>
         <el-form-item label="报名选项:" prop="participantLimit">
-          <el-checkbox v-model="detail.isDinner" disabled>聚餐</el-checkbox>
+          <el-checkbox v-model="isDinner" disabled>聚餐</el-checkbox>
         </el-form-item>
       </el-form>
 
@@ -124,8 +124,12 @@ export default {
         description: '',
         participantLimit: '',
         date: '',
+        isDinner: false,
         players: []
       },
+
+      isDinner: false,
+
       addPlayerData: {
         playerId: '',
         dinner: false
@@ -149,12 +153,13 @@ export default {
     }
   },
   created() {
-    this.edit = !!window.location.hash.includes('edit')
+    this.edit = window.location.hash.includes('edit')
     this.competitionId = this.$route.params.id
 
     this.getDetail()
   },
   methods: {
+
     getDetail() {
       getCompetitionDetail({id: this.competitionId}).then((res) => {
         const {
@@ -178,6 +183,7 @@ export default {
         for (let i = 0; i < res.signUpOptionIds.length; i++) {
           if (res.signUpOptionIds[i] === 1) {
             this.detail.isDinner = true
+            this.isDinner = true
           }
         }
       })

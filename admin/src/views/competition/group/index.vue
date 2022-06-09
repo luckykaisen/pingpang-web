@@ -2,7 +2,7 @@
   <div class="container">
     <div v-show="!preview">
       <el-row v-for="rowGroup in rowGroups">
-        <el-col :span="3" style="margin-top: 10px" v-for="colGroup in rowGroup.colGroups">
+        <el-col :span="6" style="margin-top: 10px" v-for="colGroup in rowGroup.colGroups">
           <div class="table-content">
 <!--            <span>{{colGroup.name}}</span>-->
             <el-input v-model="colGroup.name" placeholder="请输入姓名" style="width: 200px" @change="onModifyGroupName(colGroup)"></el-input>
@@ -33,7 +33,7 @@
 
     <div v-show="preview">
       <el-row v-for="rowGroup in rowGroups">
-        <el-col :span="3" style="margin-top: 10px" v-for="colGroup in rowGroup.colGroups">
+        <el-col :span="6" style="margin-top: 10px" v-for="colGroup in rowGroup.colGroups">
           <div class="table-content">
             <span style="font-size: 26px; color: red">{{colGroup.name}}</span>
             <el-table
@@ -56,7 +56,7 @@
 
     <div style="position: fixed; bottom: 50px; right: 10px">
       <el-button type="primary" @click="addGroupDialogFormVisible = true" v-show="rowGroups.length === 0">创建分组</el-button>
-      <el-button type="primary" @click="preview = !preview" >{{!preview ? '预览' : '编辑'}}</el-button>
+      <el-button type="primary" @click="clickPreview" >{{!preview ? '预览' : '编辑'}}</el-button>
       <el-button type="primary" @click="onAddOneGroup()">添加小组</el-button>
       <el-button type="primary" @click="downloadExcelFormVisible = true" v-show="rowGroups.length !== 0">下载对阵表</el-button>
     </div>
@@ -165,7 +165,8 @@ export default {
       downloadGroupAgainstData : {
         id : null,
         typeId : null
-      }
+      },
+      timerNumber: null
     }
   },
   created() {
@@ -173,6 +174,27 @@ export default {
     this.fetchData()
   },
   methods: {
+
+    clickPreview() {
+      this.preview = !this.preview
+
+      if (this.preview) {
+        this.timerNumber = this.addTimer()
+      } else {
+        this.clearTimer(this.timerNumber)
+      }
+    },
+
+    addTimer() {
+      return setInterval(() => {
+        this.fetchData()
+      }, 10000)
+    },
+
+    clearTimer(timerNumber) {
+      clearInterval(timerNumber)
+    },
+
     fetchData() {
 
       this.rowGroups = []
@@ -184,7 +206,7 @@ export default {
         let colGroups = []
         for (let i = 0; i < this.groups.length; i++) {
 
-          if (i % 8 === 0) {
+          if (i % 4 === 0) {
 
             rowGroup = {}
             colGroups = []

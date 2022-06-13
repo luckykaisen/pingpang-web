@@ -17,6 +17,16 @@
           width="180">
       </el-table-column>
       <el-table-column
+          prop="signUpPrice"
+          label="报名费"
+          width="100">
+      </el-table-column>
+      <el-table-column
+          prop="dinnerPrice"
+          label="聚餐费"
+          width="100">
+      </el-table-column>
+      <el-table-column
           prop="date"
           label="比赛日期">
       </el-table-column>

@@ -18,6 +18,10 @@
         <el-form-item label="聚餐" v-show="detail.isDinner">
           <el-checkbox v-model="joinCompetitionData.dinner"/>
         </el-form-item>
+        <div class="money">
+          <span class="moneyLabel">金额：</span>
+          <span class="amount">{{getAmount()}}</span>
+        </div>
         <el-form-item>
           <el-button type="primary" @click="submitForm('joinCompetitionForm')">提交</el-button>
         </el-form-item>
@@ -43,7 +47,8 @@
 
 <script>
 
-import {getConsoleCompetitionDetail, JoinConsoleCompetitionPlayer} from '@/network/api/competition.js'
+import {getConsoleCompetitionDetail} from '@/network/api/competition.js'
+import {addOrder} from '@/network/api/order.js'
 
 export default {
   name: "index",
@@ -54,6 +59,8 @@ export default {
         id: null,
         name: null,
         players: [],
+        signUpPrice: null,
+        dinnerPrice: null,
         isDinner: false
       },
       joinCompetitionData: {
@@ -74,7 +81,9 @@ export default {
         const {
           id,
           name,
-          players
+          players,
+          signUpPrice,
+          dinnerPrice
         } = result
 
         for (let i = 0; i < result.signUpOptionIds.length; i++) {
@@ -87,6 +96,8 @@ export default {
         this.$set(this.detail, 'id', id)
         this.$set(this.detail, 'name', name)
         this.$set(this.detail, 'players', players)
+        this.$set(this.detail, 'signUpPrice', signUpPrice)
+        this.$set(this.detail, 'dinnerPrice', dinnerPrice)
       })
     },
 
@@ -95,14 +106,20 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.joinCompetitionData.id = this.detail.id
-          JoinConsoleCompetitionPlayer(this.joinCompetitionData).then((result) => {
+          addOrder(this.joinCompetitionData).then((result) => {
             this.$message({
               showClose: true,
               message: result.resultMessage,
               type: 'success'
             });
             this.$refs[formName].resetFields()
-            this.fetchData()
+
+            let payUrl = result.url
+            if (payUrl != null) {
+              window.location = payUrl
+            } else {
+              this.fetchData()
+            }
           })
         } else {
           return false;
@@ -112,6 +129,19 @@ export default {
 
     booleanFormatter(row, column) {
       return row.dinner ? '是' : '否';
+    },
+
+    getAmount() {
+
+      let amount = Number(this.detail.signUpPrice)
+
+      if (this.joinCompetitionData.dinner) {
+        amount += Number(this.detail.dinnerPrice)
+      }
+
+      console.log(amount)
+
+      return '￥' + amount
     }
   }
 }
@@ -151,4 +181,16 @@ export default {
     /*justify-content: center;*/
     /*width: 360px;*/
   }
+
+  .money {
+    color: red;
+    margin-bottom: 20px;
+  }
+
+  .amount {
+    font-size: 22px;
+    font-weight: bold;
+  }
+
+
 </style>

@@ -7,6 +7,9 @@
       <el-form-item label="描述" prop="description">
         <el-input type="textarea" v-model="addCompetitionData.description"></el-input>
       </el-form-item>
+      <el-form-item label="报名费" prop="signUpPrice">
+        <el-input v-model="addCompetitionData.signUpPrice"></el-input>
+      </el-form-item>
       <el-form-item label="参赛人数" prop="participantLimit">
         <el-input v-model="addCompetitionData.participantLimit" style="width: 200px"></el-input>
       </el-form-item>
@@ -23,6 +26,9 @@
       </el-form-item>
       <el-form-item label="报名选项" prop="participantLimit">
         <el-checkbox v-model="isDinner">聚餐</el-checkbox>
+      </el-form-item>
+      <el-form-item label="聚餐费" prop="dinnerPrice" v-show="isDinner">
+        <el-input v-model="addCompetitionData.dinnerPrice"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit('form')">提交</el-button>
@@ -54,10 +60,15 @@ export default {
         date: [
           { required: true, message: '请输入比赛日期', trigger: 'blur' }
         ],
+        signUpPrice: [
+          { required: true, message: '请输入报名费', trigger: 'blur' }
+        ],
       },
       isDinner: false,
       addCompetitionData:{
-        signUpOptionIds: []
+        signUpOptionIds: [],
+        signUpPrice: null,
+        dinnerPrice: null
       }
     }
   },
@@ -69,6 +80,8 @@ export default {
 
           if (this.isDinner) {
             this.addCompetitionData.signUpOptionIds.push(1)
+          } else {
+            this.addCompetitionData.dinnerPrice = '0'
           }
 
           addCompetition(this.addCompetitionData).then((result) => {

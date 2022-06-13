@@ -8,6 +8,9 @@
         <el-form-item label="描述">
           <el-input type="textarea" v-model="detail.description"></el-input>
         </el-form-item>
+        <el-form-item label="报名费:">
+          <el-input v-model="detail.signUpPrice"></el-input>
+        </el-form-item>
         <el-form-item label="限制人数">
           <el-input v-model="detail.participantLimit" style="width: 200px"></el-input>
         </el-form-item>
@@ -25,6 +28,9 @@
         <el-form-item label="报名选项:">
           <el-checkbox v-model="isDinner">聚餐</el-checkbox>
         </el-form-item>
+        <el-form-item label="聚餐费:" v-show="isDinner">
+          <el-input v-model="detail.dinnerPrice"></el-input>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">提交</el-button>
         </el-form-item>
@@ -39,6 +45,9 @@
         <el-form-item label="描述:">
           {{detail.description}}
         </el-form-item>
+        <el-form-item label="报名费:">
+          {{detail.signUpPrice}}
+        </el-form-item>
         <el-form-item label="限制人数:">
           {{detail.participantLimit}}
         </el-form-item>
@@ -49,6 +58,9 @@
         </el-form-item>
         <el-form-item label="报名选项:" prop="participantLimit">
           <el-checkbox v-model="isDinner" disabled>聚餐</el-checkbox>
+        </el-form-item>
+        <el-form-item label="聚餐费:" v-show="isDinner">
+          {{detail.dinnerPrice}}
         </el-form-item>
       </el-form>
 
@@ -125,7 +137,9 @@ export default {
         participantLimit: '',
         date: '',
         isDinner: false,
-        players: []
+        players: [],
+        signUpPrice: null,
+        dinnerPrice: null
       },
 
       isDinner: false,
@@ -168,7 +182,10 @@ export default {
           description,
           participantLimit,
           date,
-          players
+          players,
+          signUpPrice,
+          dinnerPrice
+
         } = res
 
         this.detail = {
@@ -177,7 +194,9 @@ export default {
           description,
           participantLimit,
           date,
-          players
+          players,
+          signUpPrice,
+          dinnerPrice
         }
 
         for (let i = 0; i < res.signUpOptionIds.length; i++) {
@@ -192,6 +211,9 @@ export default {
 
       if (this.isDinner) {
         this.modifyData.signUpOptionIds.push(1)
+        this.modifyData.dinnerPrice = this.detail.dinnerPrice
+      } else {
+        this.modifyData.dinnerPrice = '0'
       }
 
       this.modifyData.id = this.detail.id
@@ -199,6 +221,8 @@ export default {
       this.modifyData.description = this.detail.description
       this.modifyData.participantLimit = this.detail.participantLimit
       this.modifyData.date = this.detail.date
+      this.modifyData.signUpPrice = this.detail.signUpPrice
+
 
       modifyCompetition(this.modifyData).then((res) => {
         this.$alert(res.resultMessage, '提示', {
